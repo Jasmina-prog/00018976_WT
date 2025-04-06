@@ -29,7 +29,12 @@ app.get('/', (req, res) => {
 });
 
 
-app.use('/books', bookRoutes);
+app.use('/books', bookRoutes); 
+
+app.get('/about', (req, res) => {
+    res.render('about'); // This looks for views/about.ejs
+  });
+  
 
 
 app.get('/', (req, res) => {
