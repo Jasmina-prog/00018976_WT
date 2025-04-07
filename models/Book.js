@@ -14,18 +14,6 @@ const bookSchema = new mongoose.Schema({
     required: true,
     trim: true
 },
-//   genre: {
-//     type: String
-//   },
-//   publishedYear: {
-//     type: Number
-//   },
-//   rating: {
-//     type: Number,
-//     default: 0,
-//     min: 0,
-//     max: 5
-// }
 });
 
 const Book = mongoose.model('Book', bookSchema, 'books');

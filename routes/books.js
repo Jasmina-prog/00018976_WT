@@ -1,31 +1,30 @@
-// routes/books.js
 const express = require('express');
 const router = express.Router();
 const Book = require('../models/Book');
-const validateBook = require('../middleware/bookValidation'); // Import middleware
+const validateBook = require('../middleware/bookValidation'); 
 
 
 // Route: Get all books
 router.get('/', async (req, res) => {
     try {
         const books = await Book.find();
-        res.render('books', { books }); // Renders the books.ejs view
+        res.render('books', { books }); 
     } catch (error) {
         res.status(500).json({ message: 'Failed to fetch books', error });
     }
 });
 
-// Route: Render Add Book Form
+// Route: Render Add book form
 router.get('/add', (req, res) => {
-    res.render('add', { errors: [] }); // Renders the add.ejs view
+    res.render('add', { errors: [] });
 });
 
-// Route: Render Edit Book Form
+// Route: Render Edit book form
 router.get('/edit/:id', async (req, res) => {
     try {
         const book = await Book.findById(req.params.id);
         if (!book) return res.status(404).json({ message: 'Book not found' });
-        res.render('edit', { book }); // Renders the edit.ejs view
+        res.render('edit', { book }); 
     } catch (error) {
         res.status(500).json({ message: 'Failed to fetch book', error });
     }
@@ -33,7 +32,7 @@ router.get('/edit/:id', async (req, res) => {
 
 // Route: Create a new book
 router.post('/', validateBook, async (req, res) => {
-    console.log('Received Data:', req.body); // Check incoming data
+    console.log('Received Data:', req.body); 
     try {
     const { title, author, review } = req.body;
     if (!title || !author || !review) {
@@ -42,7 +41,7 @@ router.post('/', validateBook, async (req, res) => {
         const newBook = new Book({ title, author, review });
         await newBook.save();
         console.log('Book added successfully');
-        res.redirect('/books'); // Redirect to books list
+        res.redirect('/books'); 
     } catch (err) {
         console.error('Error adding book:', error);
         res.status(500).json({ message: err.message });
@@ -50,18 +49,16 @@ router.post('/', validateBook, async (req, res) => {
 });
 
 // Route: Update a book
-// PUT route in books.js
 router.put('/:id', validateBook, async (req, res) => {
     try {
         const { title, author, review } = req.body;
         const updatedBook = await Book.findByIdAndUpdate(
             req.params.id,
             { title, author, review },
-            { new: true } // Returns the updated document
+            { new: true } 
         );
         console.log("Updated book:", updatedBook);
-        res.redirect('/books'); // Redirect to books list
-        // res.status(200).json(updatedBook);
+        res.redirect('/books'); 
     } catch (error) {
         console.error("Error updating book:", error);
         res.status(400).json({ message: "Update failed", error });
@@ -74,14 +71,16 @@ router.put('/:id', validateBook, async (req, res) => {
 router.post('/delete/:id', async (req, res) => {
     try {
         await Book.findByIdAndDelete(req.params.id);
-        res.redirect('/books'); // Redirect after delete
+        res.redirect('/books'); 
     } catch (error) {
         res.status(500).json({ message: 'Error deleting book', error });
     }
 });
 
+// Route: Render about page
 router.get('/', (req, res) => {
     res.render('about');
   });
 
+  
 module.exports = router;
